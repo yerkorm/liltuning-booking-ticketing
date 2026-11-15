@@ -1,0 +1,30 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "liltuning",
+	"compatibility_date": "2026-07-29",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			// Self-reference service binding, required for the ISR/cache
+			// revalidation used by the admin panel's revalidatePath() calls.
+			// See https://opennext.js.org/cloudflare/caching
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "liltuning"
+		}
+	],
+	"r2_buckets": [
+		// Optional incremental cache bucket. Create it once with:
+		//   npx wrangler r2 bucket create liltuning-opennext-cache
+		// and uncomment below if you want persistent ISR caching across
+		// deploys/isolates. Not required to deploy — the site works without it.
+		// {
+		//   "binding": "NEXT_INC_CACHE_R2_BUCKET",
+		//   "bucket_name": "liltuning-opennext-cache"
+		// }
+	]
+}
